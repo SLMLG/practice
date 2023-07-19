@@ -59,7 +59,7 @@ for i in rang: #данные
     is_geo = geodata[j]
     j+=1
     response = requests.get(url_link,headers ={'Authorization':'Token 52e950332c5458c889a34f705fefda906829b9dd'})
-    if(response.status_code != 200 or i == 61):
+    if(response.status_code != 200 or i == 61 or i == 62 or i == 63):
         continue
     accessibility_weight += 50
     data = response.json()
@@ -68,7 +68,7 @@ for i in rang: #данные
     print("Кол-во строк:", posts.shape[0], "\nКол-во столбцов:", posts.shape[1])
     print("\n")
     print("Уникальные значения:")
-    coords_name = ['coordinates', 'coord', 'coordinate', 'longitude']
+    coords_name = ['coordinates', 'coord', 'coordinate', 'longitude', 'longitude_latitude']
     for column in posts.columns:
         for column_name in coords_name:
             if column_name == column:
@@ -82,7 +82,10 @@ for i in rang: #данные
     print(posts.isna().mean()) # или count()
     print("\n")
     print("Кол-во/Мин./Макс./Ср.:")
-    print(posts.describe(percentiles=[]).unstack())
+    if (posts.select_dtypes(exclude = object).empty):
+        print('Нет числовых значений')
+    else:
+        print(posts.describe(percentiles=[]).unstack())
     print("\n")
     print("Findability:")
     if(tag != 'Нет'):
