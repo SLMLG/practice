@@ -2,30 +2,7 @@ import pandas as pd
 import requests
 import json
 import itertools
-# i = 0
-# listOfFiles = os.listdir(r'C:\Users\Slava\Desktop\datasets')
-# Filenames = glob.glob(r'C:\Users\Slava\Desktop\datasets/*.csv')
-# for Filename in Filenames:
-#      Data = pd.read_csv(Filename)
-#      print("Файл:", listOfFiles[i])
-#      print("Кол-во строк:", Data.shape[0], "\nКол-во столбцов:", Data.shape[1])
-#      print("\n")
-#      print("Уникальные значения:")
-#for column in Data.columns:
-#           unique_count = Data[column].nunique()
-#           print(f"{column} - {unique_count}")
-#      print("\n")
-#      print("Кол-во 0:")
-#      print(Data.eq(0).sum())
-#      print("\n")
-#      print("Пропуски:")
-#      print(Data.isna().mean()) # или count()
-#      print("\n")
-#      print("Кол-во/Мин./Макс./Ср.:")
-#       print(Data.describe().agg(['count','min','max','mean']).unstack())
-#       i += 1
-#      
-#       print("----------------------------------------------------------------")
+
 rang = range(1, 336, 3)
 structure_versions = list() #структурные версии
 names = list() #имена датасетов
