@@ -2,6 +2,7 @@ import pandas as pd
 import requests
 import json
 import itertools
+import csv
 
 rang = range(1, 336, 3)
 structure_versions = list() #структурные версии
@@ -44,7 +45,7 @@ for i in rang: #паспорта
     agencys.append(data_pass['agency'])
     geodata.append(data_pass["has_geodata"])
 
-
+data_write = []
 j = 0
 for i in rang: #данные
     findability_weight = 0
@@ -73,7 +74,7 @@ for i in rang: #данные
         for column_name in coords_name:
             if column_name == column:
                 posts[column] = posts[column_name].dropna().apply(lambda x: f'({x[0]}, {x[1]})')
-    print(pd.DataFrame(posts.nunique()))
+    print(posts.nunique())
     print("\n")
     print("Кол-во 0:")
     print(posts.eq(0).sum())
@@ -110,11 +111,55 @@ for i in rang: #данные
     print("Reusability:")
     if(contact_point):
         reusability_weight += 20
-    print("Конт. точка(20):", contact_point)
+    print("Ответств. лицо(20):", contact_point)
     if(agency):
         reusability_weight += 10
     print("Издатель(10):", agency)
     print("Weight:", reusability_weight)
     print("\n")
     print("----------------------------------------------------------------")
+    row = [
+        i,
+        name,
+        posts.shape[0],
+        posts.shape[1],
+        posts.nunique().to_dict(),
+        posts.eq(0).sum().to_dict(),
+        posts.isna().mean().to_dict(),
+        posts.describe(percentiles=[]).unstack().to_dict(),
+        tag,
+        category,
+        is_geo,
+        posts.columns[posts.columns.str.contains('date|time')].notna().all(),
+        findability_weight,
+        response.status_code,
+        accessibility_weight,
+        contact_point,
+        agency,
+        reusability_weight
+    ]
+    data_write.append(row)
     
+with open('otchet.csv', 'w', newline='') as csv_file:
+    writer = csv.writer(csv_file)
+    writer.writerow([
+        'Dataset ID',
+        'Dataset Name',
+        'Number of Rows',
+        'Number of Columns',
+        'Unique Values',
+        'Count of Zeros',
+        'Missing Values',
+        'Statistics',
+        'Tags',
+        'Category',
+        'Has Geodata',
+        'Has DateTime',
+        'Findability Weight',
+        'AccessURL Status Code',
+        'Accessibility Weight',
+        'Responsible Person',
+        'Agency',
+        'Reusability Weight'
+    ])
+    writer.writerows(data_write)
