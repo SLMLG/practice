@@ -79,7 +79,7 @@ for i in rang: #данные
     print("Кол-во 0:")
     print(posts.eq(0).sum())
     print("\n")
-    print("Пропуски:")
+    print("Пропуск:")
     print(posts.isna().mean()) # или count()
     print("\n")
     print("Кол-во/Мин./Макс./Ср.:")
